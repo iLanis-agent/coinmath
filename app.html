@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coin Math - app</title>
+<style>
+  :root { --accent:#8a6d1f; --ink:#28241a; --paper:#faf8f1; --soft:#f0ead8; }
+  * { box-sizing:border-box; margin:0; }
+  body { font-family:Georgia, 'Times New Roman', serif; background:var(--paper); color:var(--ink); line-height:1.55; padding:2rem 1.2rem; }
+  main { max-width:660px; margin:0 auto; }
+  h1 { font-size:1.8rem; color:var(--accent); }
+  .boundary { background:#fdeaea; border-left:6px solid #b03030; color:#5c1c1c; border-radius:6px; padding:1rem 1.1rem; margin:1rem 0 1.4rem; }
+  .boundary strong { display:block; margin-bottom:.3rem; }
+  .panel { background:var(--soft); border-left:5px solid var(--accent); border-radius:6px; padding:1rem 1.1rem; margin-bottom:1.1rem; }
+  h2 { font-size:1.1rem; margin-bottom:.6rem; }
+  p.note { font-size:.9rem; margin-bottom:.4rem; }
+  label { display:block; font-size:.9rem; margin:.45rem 0 .1rem; }
+  input { width:100%; padding:.45rem .55rem; font-size:1rem; border:1px solid #d8ccab; border-radius:6px; background:#fff; color:var(--ink); }
+  .out { margin-top:.7rem; font-size:.98rem; background:#fff; border:1px dashed #d8ccab; border-radius:6px; padding:.6rem .7rem; min-height:2.4rem; }
+  .out.err { border-color:#b03030; color:#8a1f1f; font-style:normal; }
+  footer { margin-top:1.8rem; font-size:.85rem; color:#6d6552; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Coin Math</h1>
+  <div class="boundary">
+    <strong>Boundary: counting arithmetic only</strong>
+    Your counts, the published roll standards, and the fee you type in. This page never guesses collector value.
+  </div>
+
+  <div class="panel">
+    <h2>The jar truth</h2>
+    <p class="note">What the counts actually add up to.</p>
+    <label for="j-q">Quarters</label>
+    <input id="j-q" type="number" min="0" step="1" value="47">
+    <label for="j-d">Dimes</label>
+    <input id="j-d" type="number" min="0" step="1" value="23">
+    <label for="j-n">Nickels</label>
+    <input id="j-n" type="number" min="0" step="1" value="8">
+    <label for="j-p">Pennies</label>
+    <input id="j-p" type="number" min="0" step="1" value="112">
+    <div class="out" id="j-out"></div>
+  </div>
+
+  <div class="panel">
+    <h2>The roll truth</h2>
+    <p class="note">Full rolls versus loose coins, by the published roll counts (40 quarters, 50 dimes, 40 nickels, 50 pennies).</p>
+    <label for="r-denom">Denomination (quarter, dime, nickel, or penny)</label>
+    <input id="r-denom" type="text" value="quarter">
+    <label for="r-count">How many you have</label>
+    <input id="r-count" type="number" min="0" step="1" value="47">
+    <div class="out" id="r-out"></div>
+  </div>
+
+  <div class="panel">
+    <h2>The machine truth</h2>
+    <p class="note">What the counting machine's fee actually eats.</p>
+    <label for="m-total">Jar total (dollars)</label>
+    <input id="m-total" type="number" min="0" step="0.01" value="15.57">
+    <label for="m-fee">Machine fee (percent)</label>
+    <input id="m-fee" type="number" min="0" max="100" step="0.1" value="11.9">
+    <div class="out" id="m-out"></div>
+  </div>
+
+  <footer>Coin Math is exact arithmetic over your counts, the published roll standards, and the fee you enter. <a href="index.html">Why it exists</a>.</footer>
+</main>
+<script src="engine.js"></script>
+<script>
+  const num = (id) => Number(document.getElementById(id).value);
+  const txt = (id) => document.getElementById(id).value.trim().toLowerCase();
+  function show(out, fn) {
+    try {
+      const text = fn();
+      out.textContent = text;
+      out.classList.remove("err");
+    } catch (e) {
+      out.textContent = e.message;
+      out.classList.add("err");
+    }
+  }
+  const jOut = document.getElementById("j-out");
+  const rOut = document.getElementById("r-out");
+  const mOut = document.getElementById("m-out");
+  function recalc() {
+    show(jOut, () => jarTruth(num("j-q"), num("j-d"), num("j-n"), num("j-p")));
+    show(rOut, () => rollTruth(txt("r-denom"), num("r-count")));
+    show(mOut, () => machineTruth(num("m-total"), num("m-fee")));
+  }
+  document.querySelectorAll("input").forEach((el) => {
+    el.addEventListener("input", recalc);
+    el.addEventListener("change", recalc);
+  });
+  recalc();
+</script>
+</body>
+</html>
