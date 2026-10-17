@@ -1,0 +1,106 @@
+[
+  {
+    "fn": "jarTruth",
+    "args": [
+      47,
+      23,
+      8,
+      112
+    ],
+    "expected": "$15.57 across 190 coins - the 47 quarters carry $11.75 of the jar."
+  },
+  {
+    "fn": "jarTruth",
+    "args": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "expected": "The jar is empty - no coins, no math."
+  },
+  {
+    "fn": "jarTruth",
+    "args": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "expected": "$0.41 across 4 coins - the 1 quarter carries $0.25 of the jar."
+  },
+  {
+    "fn": "jarTruth",
+    "args": [
+      0,
+      30,
+      0,
+      5
+    ],
+    "expected": "$3.05 across 35 coins - no quarters in the jar at all."
+  },
+  {
+    "fn": "rollTruth",
+    "args": [
+      "quarter",
+      47
+    ],
+    "expected": "47 quarters are 1 full roll ($10.00) plus 7 loose ($1.75) - the loose ones are the spendable ones."
+  },
+  {
+    "fn": "rollTruth",
+    "args": [
+      "dime",
+      23
+    ],
+    "expected": "23 dimes do not make a roll yet - 27 more and you have $5.00."
+  },
+  {
+    "fn": "rollTruth",
+    "args": [
+      "penny",
+      50
+    ],
+    "expected": "50 pennies are exactly 1 roll ($0.50) - nothing loose."
+  },
+  {
+    "fn": "rollTruth",
+    "args": [
+      "quarter",
+      -1
+    ],
+    "expected": "ERR:coin counts must be zero or more"
+  },
+  {
+    "fn": "machineTruth",
+    "args": [
+      15.57,
+      11.9
+    ],
+    "expected": "The machine's 11.9% cut of $15.57 is $1.85 - you keep $13.72, and the quarters you roll yourself escape the fee."
+  },
+  {
+    "fn": "machineTruth",
+    "args": [
+      15.57,
+      0
+    ],
+    "expected": "At 0% the whole $15.57 survives - every cent."
+  },
+  {
+    "fn": "machineTruth",
+    "args": [
+      -5,
+      10
+    ],
+    "expected": "ERR:the jar total must be zero or more"
+  },
+  {
+    "fn": "machineTruth",
+    "args": [
+      20,
+      120
+    ],
+    "expected": "ERR:the fee must be between 0 and 100 percent"
+  }
+]
